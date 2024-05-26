@@ -19,7 +19,7 @@ const LogoutButton = () => {
     handleLogout();
   }
 
-//if user is logged out, dont show logout button
+  //if user is logged out, dont show logout button
   if (window.location.pathname === '/login' || window.location.pathname === '/register' || window.location.pathname === '/') {
     return null;
   }

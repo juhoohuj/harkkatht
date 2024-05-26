@@ -8,7 +8,7 @@ import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import LogoutButton from './components/LogoutButton';
-import { Container, AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { Container, AppBar, Box } from '@mui/material';
 
 function App() {
   return (

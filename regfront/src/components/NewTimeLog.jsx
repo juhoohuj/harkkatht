@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { Button, TextField, Box, Typography, Paper } from "@mui/material";
 
 const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
   const [description, setDescription] = useState("");
@@ -26,50 +27,50 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
   };
 
   return (
-    <div>
-      <h2>Add Time Log</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Description</label>
-          <textarea 
-            placeholder="Description" 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Entry Date</label>
-          <input 
-            type="date" 
-            value={entryDate} 
-            onChange={(e) => setEntryDate(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Hours</label>
-          <input 
-            type="number" 
-            placeholder="Hours" 
-            value={hours} 
-            onChange={(e) => setHours(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Status</label>
-          <input 
-            type="text" 
-            placeholder="Status" 
-            value={status} 
-            onChange={(e) => setStatus(e.target.value)} 
-          />
-        </div>
-        <button type="submit">Add Time Log</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
+    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+      <Typography variant="h6">Add Time Log</Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+        <TextField
+          label="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Entry Date"
+          type="date"
+          value={entryDate}
+          onChange={(e) => setEntryDate(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          label="Hours"
+          type="number"
+          value={hours}
+          onChange={(e) => setHours(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <Button type="submit" variant="contained" color="primary">Add Time Log</Button>
+        {error && <Typography color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
+      </Box>
+    </Paper>
   );
 };
 

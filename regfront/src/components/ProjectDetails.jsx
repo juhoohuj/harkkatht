@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import NewTimeLog from "./NewTimeLog";
-import EditTimeLog from "./EditTimeLog";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button, Typography, TextField, Box, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Divider, Alert, Container, Paper, Grid } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
+import NewTimeLog from './NewTimeLog';
+import EditTimeLog from './EditTimeLog';
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -12,6 +16,7 @@ const ProjectDetails = () => {
   const [email, setEmail] = useState('');
   const [userError, setUserError] = useState(null);
   const [userSuccess, setUserSuccess] = useState(null);
+  const [editingLogId, setEditingLogId] = useState(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -81,56 +86,96 @@ const ProjectDetails = () => {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <Alert severity="error">{error}</Alert>;
   }
 
   if (!project) {
-    return <div>Loading...</div>;
+    return <Typography>Loading...</Typography>;
   }
 
   return (
-    <div>
-      <h1>{project.name}</h1>
-      <p>{project.description}</p>
-      <button onClick={handleDeleteProject}>Delete Project</button>
-      <h2>Users</h2>
-      <ul>
-        {project.users.map((user) => (
-          <li key={user.id}>{user.email}</li>
-        ))}
-      </ul>
-      <form onSubmit={handleAddUser}>
-        <input
-          type="email"
-          placeholder="User email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit">Add User</button>
-      </form>
-      {userError && <p style={{ color: 'red' }}>{userError}</p>}
-      {userSuccess && <p style={{ color: 'green' }}>{userSuccess}</p>}
-      <h2>Time Logs</h2>
-      <ul>
-        {project.time_logs.map((timeLog) => (
-          <li key={timeLog.id}>
-            <p>Description: {timeLog.description}</p>
-            <p>Entry Date: {timeLog.entry_date}</p>
-            <p>Hours: {timeLog.hours}</p>
-            <p>Status: {timeLog.status}</p>
-            <button onClick={() => handleDeleteTimeLog(timeLog.id)}>Delete</button>
-            <EditTimeLog projectId={project.id} timeLog={timeLog} onTimeLogUpdated={(updatedLog) => {
-              setProject((prevProject) => ({
-                ...prevProject,
-                time_logs: prevProject.time_logs.map((log) => log.id === updatedLog.id ? updatedLog : log),
-              }));
-            }} />
-          </li>
-        ))}
-      </ul>
-      <NewTimeLog projectId={project.id} onTimeLogCreated={handleTimeLogCreated} />
-    </div>
+    <Container maxWidth="md">
+      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+      <Grid container justifyContent="center" >
+        <Button variant="contained" color="primary" onClick={() => navigate('/projects')} style={{ marginBottom: '20px' }}>
+        Back to Projects
+        </Button>
+      </Grid>
+        <Typography variant="h4" gutterBottom>{project.name}</Typography>
+        <Typography variant="body1" gutterBottom>{project.description}</Typography>
+        
+        <Typography variant="h6" gutterBottom>Users</Typography>
+        <List>
+          {project.users.map((user) => (
+            <ListItem key={user.id}>
+              <ListItemText primary={user.email} />
+            </ListItem>
+          ))}
+        </List>
+        
+        <Box component="form" onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
+          <TextField
+            type="email"
+            label="User email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <Button type="submit" variant="contained" color="primary">Add User</Button>
+        </Box>
+        
+        {userError && <Alert severity="error">{userError}</Alert>}
+        {userSuccess && <Alert severity="success">{userSuccess}</Alert>}
+        
+        <Typography variant="h6" gutterBottom>Time Logs</Typography>
+        <List>
+          {project.time_logs.map((timeLog) => (
+            <React.Fragment key={timeLog.id}>
+              <ListItem  >
+                <ListItemText
+                  primary={`Description: ${timeLog.description}`}
+                  secondary={
+                    <>
+                      <Typography component="span">Entry Date: {timeLog.entry_date}</Typography> <br />
+                      <Typography component="span">Hours: {timeLog.hours}</Typography> <br />
+                      <Typography component="span">Status: {timeLog.status}</Typography>
+                    </>
+                  }
+                />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="edit" onClick={() => setEditingLogId(editingLogId === timeLog.id ? null : timeLog.id)}>
+                    {editingLogId === timeLog.id ? <CloseIcon /> : <EditIcon />}
+                  </IconButton>
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteTimeLog(timeLog.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+              {editingLogId === timeLog.id && (
+                <EditTimeLog
+                  projectId={project.id}
+                  timeLog={timeLog}
+                  onTimeLogUpdated={(updatedLog) => {
+                    setProject((prevProject) => ({
+                      ...prevProject,
+                      time_logs: prevProject.time_logs.map((log) => log.id === updatedLog.id ? updatedLog : log),
+                    }));
+                    setEditingLogId(null);
+                  }}
+                />
+              )}
+              <Divider />
+            </React.Fragment>
+          ))}
+        </List>
+        <NewTimeLog projectId={project.id} onTimeLogCreated={handleTimeLogCreated} />
+        <Grid container justifyContent="center" >
+        <Button variant="contained" color="error" onClick={handleDeleteProject} style={{ marginTop: '20px', }}>Delete Project</Button>
+        </Grid>
+      </Paper>
+    </Container>
   );
 };
 

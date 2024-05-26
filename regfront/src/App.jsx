@@ -8,59 +8,61 @@ import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import LogoutButton from './components/LogoutButton';
+import { Container, AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 
 function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <PrivateRoute>
+      <Container maxWidth="md">
+        <AppBar position="static">
             <LogoutButton />
-          </PrivateRoute>
-        </nav>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <PublicRoute>
-                <Home />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <Register />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <PrivateRoute>
-                <Projects />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/projects/:id"
-            element={
-              <PrivateRoute>
-                <ProjectDetails />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
+        </AppBar>
+        <Box marginTop={2}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <PrivateRoute>
+                  <Projects />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <PrivateRoute>
+                  <ProjectDetails />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/logout"
+              element={
+                <PrivateRoute>
+                  <LogoutButton />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </Box>
+      </Container>
     </Router>
   );
 }

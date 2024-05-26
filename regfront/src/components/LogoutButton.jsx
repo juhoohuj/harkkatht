@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Toolbar } from '@mui/material';
+import { Button, Container, Grid } from '@mui/material';
 import axios from 'axios';
 
 const LogoutButton = () => {
@@ -25,9 +25,7 @@ const LogoutButton = () => {
   }
 
   return (
-    <Toolbar>
       <Button color="info" variant='contained' onClick={handleLogout}>Logout</Button>
-    </Toolbar>
   );
 };
 

@@ -29,7 +29,7 @@ const NewProject = ({ onProjectCreated }) => {
   };
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+    <Paper elevation={1} style={{ padding: '20px', marginTop: '20px' }}>
       <Typography variant="h6">Create New Project</Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
         <TextField
@@ -80,7 +80,7 @@ const NewProject = ({ onProjectCreated }) => {
             shrink: true,
           }}
         />
-        <Button type="submit" variant="contained" color="primary">Add Project</Button>
+        <Button type="submit" variant="contained" color="primary" size="small">Add Project</Button>
         {error && <Typography color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
       </Box>
     </Paper>

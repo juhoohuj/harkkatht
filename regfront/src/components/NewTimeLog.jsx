@@ -27,7 +27,7 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
   };
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+    <Paper elevation={3} style={{ padding: '20px', marginTop: '10px', marginBottom: '20px' }}>
       <Typography variant="h6">Add Time Log</Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
         <TextField
@@ -37,6 +37,7 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
           required
           fullWidth
           margin="normal"
+          size="small"
         />
         <TextField
           label="Entry Date"
@@ -49,6 +50,7 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
           InputLabelProps={{
             shrink: true,
           }}
+          size="small"
         />
         <TextField
           label="Hours"
@@ -58,6 +60,7 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
           required
           fullWidth
           margin="normal"
+          size="small"
         />
         <TextField
           label="Status"
@@ -66,8 +69,9 @@ const NewTimeLog = ({ projectId, onTimeLogCreated }) => {
           required
           fullWidth
           margin="normal"
+          size="small"
         />
-        <Button type="submit" variant="contained" color="primary">Add Time Log</Button>
+        <Button type="submit" variant="contained" color="primary" size="small">Add Time Log</Button>
         {error && <Typography color="error" style={{ marginTop: '10px' }}>{error}</Typography>}
       </Box>
     </Paper>

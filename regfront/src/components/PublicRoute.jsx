@@ -13,7 +13,13 @@ const PublicRoute = ({ children }) => {
         });
         setAuthenticated(response.data.authenticated);
       } catch (error) {
-        setAuthenticated(false);
+        if (error.response && error.response.status === 401) {
+          // Handle 401 error silently
+          setAuthenticated(false);
+        } else {
+          // Optionally handle other errors differently
+          setAuthenticated(false);
+        }
       }
     };
 

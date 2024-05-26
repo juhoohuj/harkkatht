@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Typography, TextField, Box, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Divider, Alert, Container, Paper, Grid } from '@mui/material';
+import { Button, Typography, TextField, Box, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Divider, Alert, Container, Paper, Grid, InputAdornment } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
 import NewTimeLog from './NewTimeLog';
 import EditTimeLog from './EditTimeLog';
 
@@ -17,6 +18,7 @@ const ProjectDetails = () => {
   const [userError, setUserError] = useState(null);
   const [userSuccess, setUserSuccess] = useState(null);
   const [editingLogId, setEditingLogId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -85,6 +87,14 @@ const ProjectDetails = () => {
     }
   };
 
+  const filteredTimeLogs = project
+    ? project.time_logs.filter(
+        (log) =>
+          log.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          log.status.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
   if (error) {
     return <Alert severity="error">{error}</Alert>;
   }
@@ -95,45 +105,37 @@ const ProjectDetails = () => {
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-      <Grid container justifyContent="center" >
-        <Button variant="contained" color="primary" onClick={() => navigate('/projects')} style={{ marginBottom: '20px' }}>
-        Back to Projects
-        </Button>
-      </Grid>
-        <Typography variant="h4" gutterBottom>{project.name}</Typography>
+      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', backgroundColor: '#fff' }}>
+        <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: '20px' }}>
+          <Typography variant="h4" gutterBottom>{project.name}</Typography>
+          <Button variant="contained" color="primary" size='small' onClick={() => navigate('/projects')}>
+            Back to Projects
+          </Button>
+        </Grid>
         <Typography variant="body1" gutterBottom>{project.description}</Typography>
-        
-        <Typography variant="h6" gutterBottom>Users</Typography>
-        <List>
-          {project.users.map((user) => (
-            <ListItem key={user.id}>
-              <ListItemText primary={user.email} />
-            </ListItem>
-          ))}
-        </List>
-        
-        <Box component="form" onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
-          <TextField
-            type="email"
-            label="User email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <Button type="submit" variant="contained" color="primary">Add User</Button>
-        </Box>
-        
-        {userError && <Alert severity="error">{userError}</Alert>}
-        {userSuccess && <Alert severity="success">{userSuccess}</Alert>}
-        
+        <Typography variant="body2" gutterBottom>Status: {project.status}</Typography>
+
         <Typography variant="h6" gutterBottom>Time Logs</Typography>
+        <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: '20px' }}>
+          <TextField
+            placeholder="Search by description or status"
+            size='small'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+          />
+        </Grid>
         <List>
-          {project.time_logs.map((timeLog) => (
+          {filteredTimeLogs.map((timeLog) => (
             <React.Fragment key={timeLog.id}>
-              <ListItem  >
+              <ListItem>
                 <ListItemText
                   primary={`Description: ${timeLog.description}`}
                   secondary={
@@ -171,8 +173,34 @@ const ProjectDetails = () => {
           ))}
         </List>
         <NewTimeLog projectId={project.id} onTimeLogCreated={handleTimeLogCreated} />
+
+        <Typography variant="h6" gutterBottom>Users</Typography>
+        <List>
+          {project.users.map((user) => (
+            <ListItem key={user.id}>
+              <ListItemText primary={user.email} />
+            </ListItem>
+          ))}
+        </List>
+        
+        <Box component="form" onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
+          <TextField
+            type="email"
+            label="User email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+            size='small'
+          />
+          <Button type="submit" variant="contained" color="primary" size='small' fullWidth>Add User</Button>
+        </Box>
+        
+        {userError && <Alert severity="error">{userError}</Alert>}
+        {userSuccess && <Alert severity="success">{userSuccess}</Alert>}
         <Grid container justifyContent="center" >
-        <Button variant="contained" color="error" onClick={handleDeleteProject} style={{ marginTop: '20px', }}>Delete Project</Button>
+        <Button variant="contained" color="error" onClick={handleDeleteProject} size='small' style={{ marginTop: '20px', }}>Delete Project</Button>
         </Grid>
       </Paper>
     </Container>

@@ -9,12 +9,19 @@ import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import LogoutButton from './components/LogoutButton';
 import { Container, AppBar, Box } from '@mui/material';
-import { Padding } from '@mui/icons-material';
 
 function App() {
   return (
     <Router>
-      <Container maxWidth="md" style={{padding: 20}}>
+      <Container maxWidth="md"         
+      style={{ 
+          padding: 10, 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          minHeight: '100vh'
+        }}>
         <AppBar position="static">
             <LogoutButton />
         </AppBar>

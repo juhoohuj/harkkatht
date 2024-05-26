@@ -10,8 +10,19 @@ module TimeregApi
     config.autoload_lib(ignore: %w(assets tasks))
     config.api_only = true
 
-    # Sessions
+    # Sessiot / Evästeet
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    # CORS
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'localhost:3000'  # Aseta frontendin URL
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true  # Salli evästeiden ja tunnisteiden välitys
+      end
+    end
   end
 end

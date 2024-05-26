@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_23_184527) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_26_162309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,10 +20,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_184527) do
     t.string "status"
     t.date "start_date"
     t.date "end_date"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "projects_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.index ["project_id", "user_id"], name: "index_projects_users_on_project_id_and_user_id"
+    t.index ["user_id", "project_id"], name: "index_projects_users_on_user_id_and_project_id"
   end
 
   create_table "time_logs", force: :cascade do |t|
@@ -51,7 +56,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_184527) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "projects", "users"
   add_foreign_key "time_logs", "projects"
   add_foreign_key "time_logs", "users"
 end

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import NewProject from "./NewProject";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -15,18 +17,25 @@ const Projects = () => {
     };
 
     fetchProjects();
-  } , []);
+  }, []);
+
+  const handleProjectCreated = (newProject) => {
+    setProjects((prevProjects) => [...prevProjects, newProject]);
+  };
 
   return (
     <div>
       <h1>Projektit</h1>
       <ul>
         {projects.map((project) => (
-          <li key={project.id}>{project.name}</li>
+          <li key={project.id}>
+            <Link to={`/projects/${project.id}`}>{project.name}</Link>
+          </li>
         ))}
       </ul>
+      <NewProject onProjectCreated={handleProjectCreated} />
     </div>
   );
-}
+};
 
 export default Projects;
